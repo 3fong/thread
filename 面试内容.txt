@@ -1,0 +1,21 @@
+
+jdk中设计模式的体现
+
+jvm堆内存管理
+
+leetcode 算法
+
+
+大对象eden区到old的配置参数 -XX:RretenureSizeThreshold 超过此值,对象直接在old区分配
+
+
+
+
+
+
+
+
+
+
+
+
