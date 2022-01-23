@@ -289,7 +289,7 @@ AtomicLong的缺点:
 ![线程共享变量](https://programming.vip/images/doc/b01d30fe0a10f6e72f01d8766696f7aa.jpg)
 
 LongAdder:    
-也使用了volatile修改base值,但是竞争激烈时,多线程不再自旋进行该值修改,每个线程将分段并将计算值维护到Cell[]数组中,而不是共享一个值.最终求和通过cell数组中的数据求和,得到最终的结果.通过空间换取时间.
+原理:cas+分段锁.也使用了volatile修改base值,但是竞争激烈时,多线程不再自旋进行该值修改,每个线程将分段并将计算值维护到Cell[]数组中,而不是共享一个值.最终求和通过cell数组中的数据求和,得到最终的结果.通过空间换取时间.
 
 所以LongAdder和AtomicLong选择的依据是竞争的激烈程度;并非谁绝对好
 
@@ -300,40 +300,65 @@ synchronized优点:
 内存开销小;    
 jvm进行内部优化:JVM能够在运行时作出相应的优化措施：锁粗化、锁消除、锁自旋等
 
-### Lock
+### ReentrantLock
 
-可重入锁
+ReentrantLock 用于替换synchronized;支持可重入锁;公平锁;且锁需要自己定义和释放;而synchronized由jvm自动释放;
 
-synchronized 支持可重入
+- 可重入锁: 任意线程在获取到锁之后能够再次获取该锁而不会被锁所阻塞。
 
-tryLock进行锁判定,避免阻塞;
+可重入锁的原理： 通过组合自定义同步器来实现锁的获取与释放。    
+再次获取锁：识别获取锁的线程是否为当前占据锁的线程，如果是，则再次成功获取。获取锁后，进行计数自增，    
+释放锁：释放锁时，进行计数自减。    
+Java中的可重入锁： ReentrantLock、synchronized修饰的方法或代码段。    
+可重入锁的作用： 避免死锁。
 
-lockInterruptibly()用于替换lock(),锁定中可以被打断;
+- tryLock进行锁判定,避免阻塞;
 
-公平锁: 锁竞争时,先判断等待队列中是否有线程,有的话则进入等待队列,否则则直接进行竞争
+- lockInterruptibly()用于替换lock(),锁定中可以被打断;
 
+- 公平锁: 锁竞争时,先判断等待队列中是否有线程,有的话则进入等待队列,否则则直接进行竞争;ReentrantLock(true)
+
+- 使用
+
+1 需要显示的定义加锁:ReentrantLock.lock(),解锁:ReentrantLock.unlock()操作
+
+![ReentrantLock使用](snapshot/lockdemo.png)
+
+2 读写锁: ReentrantReadWriteLock.readLock();ReentrantReadWriteLock.writeLock();
+
+可通过方法来具体细分读锁和写锁,实现上更灵活;
+
+![ReentrantReadWriteLock使用](snapshot/readwritelock.png)
 
 aqs 
 
-- 执行控制
+### 线程执行控制
 
 执行流程控制.可以使用 countDownLatch ,join来控制
 计数阻塞,latch.await();
 join是将执行线程统一管理,灵活性没有countDownLatch好
 
-CyclicBarrier
+CyclicBarrier:线程执行数量控制;通过阻塞线程执行,来实现批量线程业务操作
+
+![概览](snapshot/barrier-landscape.png) 
+
+demo
+![demo](snapshot/barrier.png)
 
 Phaser
 
-Semaphore
+Semaphore:信号量,类似于令牌,通过它可以实现线程方法的原子性访问;
 
 限流
-
+demo:
+![demo](snapshot/](semaphore.png)
 
 Exchanger
 
 信息交换,阻塞进行 场景???
 
+demo     
+![demo](snapshot/exchanger.png)
 
 <实战高并发程序设计>
 
