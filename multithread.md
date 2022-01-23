@@ -199,6 +199,15 @@ ASM进行编译二进制可执行文件
 
 - CAS
 
+m=0;
+m++;
+expected = read m;
+cas(obj,expected,actual) { ????
+	for(;;) {
+		if(actual==expectd) m = actual
+	}
+}
+
 ABA问题:AtomicStampedReference
 基础数据类型没有问题;引用类型,可能存在间接引用对象的修改问题.
 
@@ -210,7 +219,7 @@ obj -> A -> ref C
 
 - Atomic*的实现  
 
-保证数据操作的原子性实现.它实际是基于Unsafe类进行实现,JDK11中使用单例获取Unsafe类对象
+保证数据操作的原子性实现.它实际是基于Unsafe类进行实现,JDK11中使用单例获取Unsafe类对象(1.9关闭了)
 
 AtomicInteger
 ![AtomicInteger](snapshot/AtomicInteger.png)
@@ -220,9 +229,53 @@ Unsafe
 ![Unsafe](snapshot/unsafe.png)
 
 
+- increment
+
+LongAdder
+synchronized
+AtomicInteger 不加锁
+
+LongAdder 原理
+
+分段锁进行求和处理.
 
 
+### Lock
 
+可重入锁
+
+synchronized 支持可重入
+
+tryLock进行锁判定,避免阻塞;
+
+lockInterruptibly()用于替换lock(),锁定中可以被打断;
+
+公平锁: 锁竞争时,先判断等待队列中是否有线程,有的话则进入等待队列,否则则直接进行竞争
+
+
+aqs 
+
+- 执行控制
+
+执行流程控制.可以使用 countDownLatch ,join来控制
+计数阻塞,latch.await();
+join是将执行线程统一管理,灵活性没有countDownLatch好
+
+CyclicBarrier
+
+Phaser
+
+Semaphore
+
+限流
+
+
+Exchanger
+
+信息交换,阻塞进行 场景???
+
+
+<实战高并发程序设计>
 
 
 
