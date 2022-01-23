@@ -86,6 +86,8 @@ volatile:可见性和禁止指令重排序;但是无法保证原子性
 
 - synchronized(Object)
 
+详细解释: [synchronized](synchronized.md)
+
 ```
 锁的是对象不是代码    
 this T.class(static)    
@@ -126,6 +128,9 @@ synchronized static method = synchronized(T.class)
 
 CAS自旋锁
 ![CAS自旋锁](snapshot/cas.png)
+
+详细解释: [cas](cas.md)
+
 
 - 指令重排序((读写屏障))
 
@@ -193,6 +198,7 @@ ASM进行编译二进制可执行文件
 
 ### 锁优化:
 
+去除锁:cas    
 锁细化 只加载需要进行一致性处理的业务逻辑上    
 锁粗化 同一个方法中有多个锁处理,可以通过锁合并来优化
 
@@ -202,7 +208,7 @@ ASM进行编译二进制可执行文件
 m=0;
 m++;
 expected = read m;
-cas(obj,expected,actual) { ????
+cas(expected,actual) {
 	for(;;) {
 		if(actual==expectd) m = actual
 	}
@@ -219,26 +225,80 @@ obj -> A -> ref C
 
 - Atomic*的实现  
 
-保证数据操作的原子性实现.它实际是基于Unsafe类进行实现,JDK11中使用单例获取Unsafe类对象(1.9关闭了)
+基于CAS进行修改数据的对比,如果和期望值相同则进行修改,否则获取新值后继续比较;它实际是基于Unsafe类保证数据操作的原子性实现.
 
 AtomicInteger
 ![AtomicInteger](snapshot/AtomicInteger.png)
+
+实现原理:
+
+它依赖Unsafe的方法getAndAddLong,这个方法通过CAS实现原子自增操作
+```
+/**
+ * Atomically increments by one the current value.
+ *
+ * @return the updated value
+ */
+public final long incrementAndGet() {
+    return unsafe.getAndAddLong(this, valueOffset, 1L) + 1L;
+}
+```
+![AtomicLong](https://programming.vip/images/doc/fa4b2da0184820355c205c21fa9d7487.jpg)
+
 
 Unsafe    
 
 ![Unsafe](snapshot/unsafe.png)
 
+### 锁细化-分段锁
 
-- increment
+分段锁:通过细化锁的范围来实现锁优化的手段.    
 
-LongAdder
+
+
+hashtable,hashmap,concurrenthashmap:    
+[hashtable,hashmap,concurrenthashmap](hashtable,hashmap,concurrenthashmap.md)
+
+
+
+- increment compare
+
+实现多线程安全自增的方式有下面三种:    
+```
 synchronized
-AtomicInteger 不加锁
+AtomicLong 不加锁
+LongAdder
+```
 
 LongAdder 原理
 
+![LongAdder](https://upload-images.jianshu.io/upload_images/15854876-7f051c26daf3db20.png?imageMogr2/auto-orient/strip|imageView2/2/w/582/format/webp)
+
+采用了cas+分段锁的机制来优化单纯cas在竞争激烈时的大量自旋问题.
+
+[LongAdder 原理](https://www.jianshu.com/p/b3c5b05055de)
+
 分段锁进行求和处理.
 
+- 为啥LongAdder比AtomicLong好?
+
+AtomicLong的缺点:    
+1 AtomicLong因为通过CAS来实现原子自增,这种方式适合线程竞争不激烈的场景;而竞争激烈会造成大量的线程自旋,并进行值修改重试,但是这个值只有一个线程可以修改成功,会造成频繁的自旋.浪费了大量的CPU资源;    
+2 value是volatile修饰的共享变量,它被所有线程共享,所以值使用时也有注意共享变量的影响effort;    
+线程共享变量:     
+![线程共享变量](https://programming.vip/images/doc/b01d30fe0a10f6e72f01d8766696f7aa.jpg)
+
+LongAdder:    
+也使用了volatile修改base值,但是竞争激烈时,多线程不再自旋进行该值修改,每个线程将分段并将计算值维护到Cell[]数组中,而不是共享一个值.最终求和通过cell数组中的数据求和,得到最终的结果.通过空间换取时间.
+
+所以LongAdder和AtomicLong选择的依据是竞争的激烈程度;并非谁绝对好
+
+LongAdder vs AtomicLong: 
+[LongAdder vs AtomicLong](https://programming.vip/docs/which-of-longadder-and-atomiclong-performs-better-and-why.html)
+
+synchronized优点:
+内存开销小;    
+jvm进行内部优化:JVM能够在运行时作出相应的优化措施：锁粗化、锁消除、锁自旋等
 
 ### Lock
 
