@@ -338,7 +338,7 @@ Java中的可重入锁： ReentrantLock、synchronized修饰的方法或代码�
 2 reentrantlock可以定义不同的condition(等待队列)
 3 实现方式不同.synchronized是内存屏障;reentrantlock是cas
 
-aqs 
+
 
 ### 线程执行控制
 
@@ -377,7 +377,14 @@ LockSupport.unpark(); // 放行
 
 
 
+### aqs 
 
+原理:CAS + volatile
+
+state是volatile修饰的,并且设置state的方法处理有
+有setState,还有compareAndSetState
+
+入队,出队 cas
 
 
 
