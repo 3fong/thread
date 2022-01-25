@@ -176,6 +176,8 @@ public void execute(){
 ![volatile](snapshot/volatile.png)
 可以解决可见性和指令重排序(顺序性)
 
+实现原理:内存屏障
+
 volatile无法替代synchronized,因为它无法解决原子性问题.如: count++;
 
 volatile无法保证原子性     
@@ -330,6 +332,12 @@ Java中的可重入锁： ReentrantLock、synchronized修饰的方法或代码�
 
 ![ReentrantReadWriteLock使用](snapshot/readwritelock.png)
 
+#### synchronized与reentrantlock的区别???
+
+1 管理方式不同
+2 reentrantlock可以定义不同的condition(等待队列)
+3 实现方式不同.synchronized是内存屏障;reentrantlock是cas
+
 aqs 
 
 ### 线程执行控制
@@ -360,9 +368,12 @@ Exchanger
 demo     
 ![demo](snapshot/exchanger.png)
 
-<实战高并发程序设计>
 
+- LockSupport
 
+用于阻塞或放行阻塞当前线程.
+LockSupport.park(); // 阻塞
+LockSupport.unpark(); // 放行
 
 
 
@@ -374,7 +385,9 @@ demo
 静态与线程安全的关系.静态是否可以使线程安全??
 
 
+### 推荐资料:
 
+<实战高并发程序设计>
 
 
 
