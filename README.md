@@ -306,6 +306,18 @@ synchronized优点:
 内存开销小;    
 jvm进行内部优化:JVM能够在运行时作出相应的优化措施：锁粗化、锁消除、锁自旋等
 
+### JUC的同步锁
+
+- ReentrantLock
+- CountDownLatch
+- CyclicBarrier
+- Phaser
+- ReadWriteLock- StampedLock
+- Semaphore
+- Exchanger
+- LockSupport
+
+
 ### ReentrantLock
 
 ReentrantLock 用于替换synchronized;支持可重入锁;公平锁;且锁需要自己定义和释放;而synchronized由jvm自动释放;
