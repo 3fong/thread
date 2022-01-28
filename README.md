@@ -68,6 +68,10 @@ interrupt用于程序底层退出,同时通知其他线程终止运行,业务实
 ![线程状态](snapshot/thread-status.png)    
 ![线程状态](https://bkimg.cdn.bcebos.com/pic/a5c27d1ed21b0ef4a9c88f08ddc451da81cb3e47?x-bce-process=image/resize,m_lfit,w_440,limit_1/format,f_auto)
 
+- 常用方法
+
+sleep() 将当前运行态线程进行阻塞状态(暂停执行,释放cpu资源,但是不释放锁),睡眠状态被中断,会抛出IterruptedException中断异常.线程到期会自动苏醒,进入可运行状态,进行cpu执行时间竞争;
+
 由于多线程存在共享变量竞争导致数据一致性问题,它可以通过同步来解决.
 
 Java Object Model:    
