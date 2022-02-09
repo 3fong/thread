@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.LockSupport;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class MonitorLock {
@@ -13,17 +14,12 @@ public class MonitorLock {
 
 
     public static void main(String[] args) {
-        for (int i = 0; i < 1; i++) {
-            System.out.println(i +"start---------------------------------------- ");
-            latch(i);
-            System.out.println(i +"end---------------------------------------- ");
-        }
     }
     // 必须要保证
     public static void latch(int i) {
         ReentrantLock lock = new ReentrantLock();
         Condition monitor = lock.newCondition();
-        Condition factory = lock.newCondition();
+        Condition factory2 = lock.newCondition();
         // 这里需要是线程安全的类,实现操作原子性;同时多线程环境,减少静态变量的使用
         List<Integer> list = Collections.synchronizedList(new ArrayList<>());
         Thread factory = new Thread(() -> {

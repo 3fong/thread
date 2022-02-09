@@ -9,7 +9,7 @@ import java.util.List;
  * 写两个线程,线程1添加10个元素到容器中,线程2实现监控元素的个数,当个数到5时,线程2给出提示并结束;
  * @create 2022/1/26 19:16
  */
-public class Monitor3 {
+public class MonitorSyn3 {
 
     static List<Integer> container = new ArrayList<>();
     private static String lock = new String();
