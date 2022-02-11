@@ -212,6 +212,8 @@ ASM进行编译二进制可执行文件
 
 - CAS
 
+cas原理,其实就是乐观锁.乐观的认为,我修改时,才需要进行加锁	
+
 m=0;
 m++;
 expected = read m;
@@ -391,38 +393,6 @@ demo
 用于阻塞或放行阻塞当前线程.
 LockSupport.park(); // 阻塞
 LockSupport.unpark(); // 放行
-
-
-
-### aqs 
-
-原理:CAS + volatile
-
-state是volatile修饰的,并且设置state的方法处理有
-有setState,还有compareAndSetState
-
-入队,出队 cas
-
-![分段锁](snapshot/aqs.png)
-
-### 源码阅读
-
-核心是理解别人的思路:    
-1. 数据结构基础    
-2. 设计模式    
-
-原则:    
-1. 跑不起来不读(debug跟踪,便于调用链识别及参数识别)
-2. 解决问题就好-目的性
-3. 一条线索到底(约束阅读范围)
-4. 无关细节略过(约束阅读范围)
-5. 一般不读静态(去除非必要内容)
-6. 一般动态读法
-7. 先读骨架
-
-读骨架是识别类调用图,一般使用uml来记录和记忆:
-
-![uml图](snapshot/uml.png)
 
 
 ### 问题
