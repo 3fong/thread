@@ -59,29 +59,96 @@ CountDownLatch: 使用了AQS的共享获取和释放，用state变量作为计�
 AQS独占锁的获取的流程示意如下:    
 ![AQS独占锁的获取的流程示意如下](https://images2015.cnblogs.com/blog/584724/201706/584724-20170612211300368-774544064.png)
 
+### 变量原子性操作
+
+实现变量原子性操作的方式:
+
+1 使用AtomicInteger来达到这种效果，这种间接管理方式增加了空间开销，还会导致额外的并发问题；    
+2 使用原子性的FieldUpdaters，由于利用了反射机制，操作开销也会更大；    
+3 使用sun.misc.Unsafe提供的JVM内置函数API，虽然这种方式比较快，但它会损害安全性和可移植性，当然在实际开发中也很少会这么做。    
+4 VarHandle
+
 - VarHandle 
 
+VarHandle 的出现替代了java.util.concurrent.atomic和sun.misc.Unsafe的部分操作。并且提供了一系列标准的**内存屏障**操作，用于更加细粒度的控制内存排序。在安全性、可用性、性能上都要优于现有的API。VarHandle 可以与任何字段、数组元素或静态变量关联，支持在不同访问模型下对这些类型变量的访问，包括简单的 read/write 访问，volatile 类型的 read/write 访问，和 CAS(compare-and-swap)等。
+
+
+价值:    
     1 普通属性原子操作;    
     2 比反射快,直接操作二进制码
 
-- ThreadLocal 线程独有    
+应用:
 
-    set方法,通过Thread.currentThread.map(ThreadLocal,obj)将值放到线程内部独享    
-    声明式事务:通过aop进行事务的提前声明,避免业务代码侵入性.而事务的实现通过ThreadLocal获取线程独有变量信息    
-    编程式事务:自己控制事务的开始,提交,回滚.优点:事务粒度灵活;缺点:代码侵入性高,开发和维护都不方便.
+AQS在jdk1.9后,compareAndSetState通过VarHandle实现
+
+```
+ // VarHandle mechanics
+    private static final VarHandle STATE;
+    static {
+        try {
+            MethodHandles.Lookup l = MethodHandles.lookup();
+            STATE = l.findVarHandle(AbstractQueuedSynchronizer.class, "state", int.class);
+        } catch (ReflectiveOperationException e) {
+            throw new ExceptionInInitializerError(e);
+        }
+        Class<?> ensureLoaded = LockSupport.class;
+    }
+    protected final boolean compareAndSetState(int expect, int update) {
+        return STATE.compareAndSet(this, expect, update);
+    }
+```
+
+[MethodHandles.Lookup](https://docs.oracle.com/javase/9/docs/api/java/lang/invoke/MethodHandles.Lookup.html)
+
 
 ### 强软弱虚引用
 
+强引用: 不进行垃圾回收的引用.new的对象都是强引用.    
+SoftReference: 当垃圾回收后,空间依旧不够会回收软引用占用的堆空间.用于缓存实现
 WeakReference 只要垃圾回收,就会直接被回收;作用当强引用指向的引用消失后,弱引用就应该也消失;一般用在容器里???
 
-PhantomReference 虚引用,jvm
+PhantomReference 虚引用主要用来跟踪对象被垃圾回收器回收的活动。虚引用与软引用和弱引用的一个区别在于：**虚引用必须和引用队列 （ReferenceQueue）联合使用**。当垃圾回收器准备回收一个对象时，如果发现它还有虚引用，就会在回收对象的内存之前，把这个虚引用加入到与之 关联的引用队列中。你声明虚引用的时候是要传入一个queue的。当你的虚引用所引用的对象已经执行完finalize函数的时候，就会把对象加到queue里面。你可以通过判断queue里面是不是有对象来判断你的对象是不是要被回收了.
+
+强软弱虚引用回收时点:    
+![强软弱虚引用](https://images2015.cnblogs.com/blog/647994/201702/647994-20170215235519441-1287012986.png)
+
+PhantomReference结构:    
+![PhantomReference struct](pic/phantom-struct.png)
+
+
+引用示例:    
+[demo](multithreaddemo/src/main/java/com/ll/aqs/SelfReference.java)
+
+PhantomReference回收示例:    
+[demo](multithreaddemo/src/main/java/com/ll/aqs/SelfPhantomReference.java)
+
+- WeakHashMap
+
+弱引用map通过Entry继承WeakReference来支持垃圾回收操作
+
+```
+private static class Entry<K,V> extends WeakReference<Object> implements Map.Entry<K,V> {}
+```
+
+demo:    
+[demo](multithreaddemo/src/main/java/com/ll/aqs/SelfWeakHashMap.java)
 
 
 
+- ThreadLocal 线程独有    
 
-作业
-AQS addWork源码
-WeakHashMap 作用
+ThreadLocal.ThreadLocalMap结构:    
+![ThreadLocal.ThreadLocalMap结构](pic/weakr-struct.png)
+
+set方法,通过Thread.currentThread.map(ThreadLocal,obj)将值放到线程内部独享    
+声明式事务:通过aop进行事务的提前声明,避免业务代码侵入性.而事务的实现通过ThreadLocal获取线程独有变量信息    
+编程式事务:自己控制事务的开始,提交,回滚.优点:事务粒度灵活;缺点:代码侵入性高,开发和维护都不方便.
+
+
+### 作业
+
+AQS acquiry源码
+WeakHashMap 作用:作缓存,key是弱引用,当key为null时,垃圾回收时会进行内存空间回收;
 
 
 
@@ -93,6 +160,6 @@ ide 虚拟机参数配置 -Xms20M -Xmx20M
 [AbstractQueuedSynchronizer源码解读](https://www.cnblogs.com/micrari/p/6937995.html)
 
 [AbstractQueuedSynchronizer 原理分析 - 独占/共享模式](https://cloud.tencent.com/developer/article/1113761)
-
+[Java 9 变量句柄-VarHandle](https://www.jianshu.com/p/e231042a52dd)
 
 
