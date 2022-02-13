@@ -113,7 +113,7 @@ PhantomReference 虚引用主要用来跟踪对象被垃圾回收器回收的活
 ![强软弱虚引用](https://images2015.cnblogs.com/blog/647994/201702/647994-20170215235519441-1287012986.png)
 
 PhantomReference结构:    
-![PhantomReference struct](pic/phantom-struct.png)
+![PhantomReference struct](snapshot/phantom-struct.png)
 
 
 引用示例:    
@@ -138,7 +138,7 @@ demo:
 - ThreadLocal 线程独有    
 
 ThreadLocal.ThreadLocalMap结构:    
-![ThreadLocal.ThreadLocalMap结构](pic/weakr-struct.png)
+![ThreadLocal.ThreadLocalMap结构](snapshot/weakr-struct.png)
 
 set方法,通过Thread.currentThread.map(ThreadLocal,obj)将值放到线程内部独享    
 声明式事务:通过aop进行事务的提前声明,避免业务代码侵入性.而事务的实现通过ThreadLocal获取线程独有变量信息    
