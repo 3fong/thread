@@ -35,6 +35,12 @@ public class T01_TestHashtable {
         }
     }
 
+    /**
+     * 100线程
+     *  写 1000000 280ms
+     *  读 10000000 31707ms
+     * @param args
+     */
     public static void main(String[] args) {
 
         long start = System.currentTimeMillis();

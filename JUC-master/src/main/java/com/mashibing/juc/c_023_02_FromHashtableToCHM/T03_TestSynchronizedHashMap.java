@@ -36,7 +36,13 @@ public class T03_TestSynchronizedHashMap {
             }
         }
     }
-
+    /**
+     * 100线程 实际测试与Hashtable差异不大,使用了装饰器模式,来包装map里的方法,
+     * 实现原理与hashtable差异不大,但是核心是实际的数据结构可以是hashmap,这个结构实现上可能比hashtable更优.
+     *  写 1000000 290 ms
+     *  读 10000000 41353 ms
+     * @param args
+     */
     public static void main(String[] args) {
 
         long start = System.currentTimeMillis();

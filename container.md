@@ -14,11 +14,16 @@ collection:
 list,set:装东西;queue:高并发;
 
 
+
 跳表结构:    
 ![跳表结构](snapshot/container-skiptable.png)
 
 CompletableFuture
 
+
+### 设计思路学习
+
+ConcurrentHashMap<K, V> extends AbstractMap<K, V> implements ConcurrentMap<K, V>
 
 ### 学习一下游戏开发
 

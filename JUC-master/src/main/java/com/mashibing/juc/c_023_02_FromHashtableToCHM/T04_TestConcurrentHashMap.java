@@ -35,7 +35,12 @@ public class T04_TestConcurrentHashMap {
             }
         }
     }
-
+    /**
+     * 100线程 写入比较慢,但是读取速度超快
+     *  写 1000000 685 ms
+     *  读 10000000 601 ms
+     * @param args
+     */
     public static void main(String[] args) {
 
         long start = System.currentTimeMillis();

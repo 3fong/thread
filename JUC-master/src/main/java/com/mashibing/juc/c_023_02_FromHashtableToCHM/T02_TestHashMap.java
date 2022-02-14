@@ -34,7 +34,10 @@ public class T02_TestHashMap {
             }
         }
     }
-
+    /**
+     * 线程不安全 无法保证写入结果
+     * @param args
+     */
     public static void main(String[] args) {
 
         long start = System.currentTimeMillis();
