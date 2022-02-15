@@ -10,12 +10,14 @@ import java.util.concurrent.ConcurrentHashMap;
 public class ConcurrentHashMapStudy {
 
     public static void main(String[] args) {
-        for (int i = 0; i < 5; i++) {
-            int spread = ConcurrentHashMapStudy.spread(i);
-            System.out.println(spread);
-            System.out.println(" i "+(i ^ i )+" h "+(i ^ i >>> 16));
-        }
-
+        ConcurrentHashMap map = new ConcurrentHashMap();
+        map.put("a","a");
+//        for (int i = 0; i < 5; i++) {
+//            int spread = ConcurrentHashMapStudy.spread(i);
+//            System.out.println(spread);
+//            System.out.println(" i "+(i ^ i )+" h "+(i ^ i >>> 16));
+//        }
+        System.out.println(map.get("a"));
     }
 
     public static final int spread(int h) {
