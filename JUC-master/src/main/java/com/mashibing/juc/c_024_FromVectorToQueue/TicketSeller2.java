@@ -1,14 +1,14 @@
 /**
- * ÓĞNÕÅ»ğ³µÆ±£¬Ã¿ÕÅÆ±¶¼ÓĞÒ»¸ö±àºÅ
- * Í¬Ê±ÓĞ10¸ö´°¿Ú¶ÔÍâÊÛÆ±
- * ÇëĞ´Ò»¸öÄ£Äâ³ÌĞò
- * 
- * ·ÖÎöÏÂÃæµÄ³ÌĞò¿ÉÄÜ»á²úÉúÄÄĞ©ÎÊÌâ£¿
- *  
- * Ê¹ÓÃVector»òÕßCollections.synchronizedXXX
- * ·ÖÎöÒ»ÏÂ£¬ÕâÑùÄÜ½â¾öÎÊÌâÂğ£¿
- * 
- * @author ÂíÊ¿±ø
+ * æœ‰Nå¼ ç«è½¦ç¥¨ï¼Œæ¯å¼ ç¥¨éƒ½æœ‰ä¸€ä¸ªç¼–å·
+ * åŒæ—¶æœ‰10ä¸ªçª—å£å¯¹å¤–å”®ç¥¨
+ * è¯·å†™ä¸€ä¸ªæ¨¡æ‹Ÿç¨‹åº
+ *
+ * åˆ†æä¸‹é¢çš„ç¨‹åºå¯èƒ½ä¼šäº§ç”Ÿå“ªäº›é—®é¢˜ï¼Ÿ
+ *
+ * ä½¿ç”¨Vectoræˆ–è€…Collections.synchronizedXXX
+ * åˆ†æä¸€ä¸‹ï¼Œè¿™æ ·èƒ½è§£å†³é—®é¢˜å—ï¼Ÿ
+ * ä¹Ÿä¸èƒ½è§£å†³,å› ä¸ºtickets.size()å’Œtickets.remove()æ“ä½œä¸æ˜¯åŸå­æ€§çš„
+ * @author é©¬å£«å…µ
  */
 package com.mashibing.juc.c_024_FromVectorToQueue;
 
@@ -20,7 +20,7 @@ public class TicketSeller2 {
 	
 	
 	static {
-		for(int i=0; i<1000; i++) tickets.add("Æ± ±àºÅ£º" + i);
+		for(int i=0; i<1000; i++) tickets.add("ç¥¨ç¼–å·ï¼š" + i);
 	}
 	
 	public static void main(String[] args) {
@@ -29,14 +29,14 @@ public class TicketSeller2 {
 			new Thread(()->{
 				while(tickets.size() > 0) {
 					
-					try {
-						TimeUnit.MILLISECONDS.sleep(10);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
+//					try {
+//						TimeUnit.MILLISECONDS.sleep(10);
+//					} catch (InterruptedException e) {
+//						e.printStackTrace();
+//					}
 					
 					
-					System.out.println("ÏúÊÛÁË--" + tickets.remove(0));
+					System.out.println("é”€å”®äº†--" + tickets.remove(0));
 				}
 			}).start();
 		}

@@ -30,6 +30,7 @@ JDK1.8之后在解决哈希冲突时有了较大的变化，当链表长度大�
 HashMap 红黑树:    
 ![HashMap 红黑树](https://img-blog.csdnimg.cn/img_convert/af740fc6151848fec7712457ef55ef7b.png)
 
+ConcurrentHashMap: 
 ConcurrentHashMap.put实现核心步骤:
 ```
 如果没有初始化就先调用initTable（）方法来进行初始化过程
@@ -44,8 +45,14 @@ ConcurrentHashMap.put实现核心步骤:
 跳表结构:    
 ![跳表结构](snapshot/container-skiptable.png)
 
-CompletableFuture
 
+
+异步请求CompletableFuture
+
+[CompletableFuture](https://zhuanlan.zhihu.com/p/344431341)
+
+ConcurrentLinkedQueue:    
+[ConcurrentLinkedQueue详解](https://www.jianshu.com/p/231caf90f30b)
 
 ### 设计思路学习
 

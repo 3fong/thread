@@ -1,7 +1,7 @@
 package com.ll.aqs;
 
-import java.lang.invoke.MethodHandles;
-import java.lang.invoke.VarHandle;
+//import java.lang.invoke.MethodHandles;
+//import java.lang.invoke.VarHandle;
 
 /**
  * java 9 版本 VarHandle 的出现替代了java.util.concurrent.atomic和sun.misc.Unsafe的部分操作。
@@ -14,34 +14,29 @@ import java.lang.invoke.VarHandle;
  */
 
 public class VarHandleStudy {
-    private int x=0;
-    private static VarHandle handle;
-    static {
-        try {
-            handle = MethodHandles.lookup().findVarHandle(VarHandleStudy.class,"x",int.class);
-        } catch (NoSuchFieldException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public static void main(String[] args) {
-        VarHandleStudy study = new VarHandleStudy();
-
-        System.out.println((int)handle.get(study));
-        handle.set(study,9);
-        System.out.println(study.x);
-
-        handle.compareAndSet(study,9,10);
-        System.out.println(study.x);
-
-        handle.getAndAdd(study,10);
-        System.out.println(study.x);
-
-
-
-
-
-    }
+//    private int x=0;
+//    private static VarHandle handle;
+//    static {
+//        try {
+//            handle = MethodHandles.lookup().findVarHandle(VarHandleStudy.class,"x",int.class);
+//        } catch (NoSuchFieldException e) {
+//            e.printStackTrace();
+//        } catch (IllegalAccessException e) {
+//            e.printStackTrace();
+//        }
+//    }
+//
+//    public static void main(String[] args) {
+//        VarHandleStudy study = new VarHandleStudy();
+//
+//        System.out.println((int)handle.get(study));
+//        handle.set(study,9);
+//        System.out.println(study.x);
+//
+//        handle.compareAndSet(study,9,10);
+//        System.out.println(study.x);
+//
+//        handle.getAndAdd(study,10);
+//        System.out.println(study.x);
+//    }
 }
