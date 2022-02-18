@@ -1,6 +1,7 @@
 package com.ll.container;
 
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
  * @author liulei
@@ -11,13 +12,17 @@ public class SkipTableStudy {
 
     public static void main(String[] args) {
 
-        CompletableFuture future = new CompletableFuture();
+        ConcurrentLinkedQueue queue = new ConcurrentLinkedQueue();
+        queue.offer("a");
+        queue.offer("b");
+        queue.offer("c");
+        System.out.println(queue.poll());
+        System.out.println(queue.poll());
+        System.out.println(queue.poll());
+        queue.offer("d");
+        System.out.println(queue.poll());
+        System.out.println(queue.poll());
 
-        Object t = new Object();
-        Object tail = new Object();
-        boolean eqs = t != (t = tail);
-        boolean eqs2 = t != (t = tail);
-        System.out.println(eqs);
-        System.out.println(eqs2);
+
     }
 }

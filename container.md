@@ -52,7 +52,18 @@ ConcurrentHashMap.put实现核心步骤:
 [CompletableFuture](https://zhuanlan.zhihu.com/p/344431341)
 
 ConcurrentLinkedQueue:    
+改示例的数据有错误,但是推导过程还是有参考意义的    
 [ConcurrentLinkedQueue详解](https://www.jianshu.com/p/231caf90f30b)
+
+CopyOnWriteArrayList: 写时复制列表,用于实现遍历的线程安全;写效率因为加锁,效率差;读的效率与其他结构差不多;而其他的共享存储对象的并发结构,核心是关心更新操作的线程安全,而不保证遍历的线程安全,会出现脏读的现象;
+
+LinkedBlockingQueue: 线程安全的排他队列结构;是一个单向链表实现的阻塞队列。该队列按 FIFO（先进先出）排序元素，新元素插入到队列的尾部，并且队列获取操作会获得位于队列头部的元素。链接队列的吞吐量通常要高于基于数组的队列，但是在大多数并发应用程序中，其可预知的性能要低。        
+[LinkedBlockingQueue](https://www.jianshu.com/p/9394b257fdde)
+
+PriorityQueue: 是一种无界的，线程不安全的队列;通过数组实现的，并拥有优先级的队列;存储的元素要求必须是可比较的对象， 如果不是就必须明确指定比较器
+
+
+
 
 ### 设计思路学习
 
@@ -69,8 +80,11 @@ ConcurrentHashMap<K, V> extends AbstractMap<K, V> implements ConcurrentMap<K, V>
 
 [Hashmap](https://blog.csdn.net/qq_37084904/article/details/109243886)
 
+[跳表和ConcurrentHashMap](https://blog.csdn.net/sunxianghuang/article/details/52221913)    
 
 
+
+[题库](http://www.educity.cn/java/498061.html)
 
 
 
