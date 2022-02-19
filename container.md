@@ -42,6 +42,8 @@ ConcurrentHashMap.put实现核心步骤:
 
 ```
 
+
+
 跳表结构:    
 ![跳表结构](snapshot/container-skiptable.png)
 
@@ -57,13 +59,26 @@ ConcurrentLinkedQueue:
 
 CopyOnWriteArrayList: 写时复制列表,用于实现遍历的线程安全;写效率因为加锁,效率差;读的效率与其他结构差不多;而其他的共享存储对象的并发结构,核心是关心更新操作的线程安全,而不保证遍历的线程安全,会出现脏读的现象;
 
-LinkedBlockingQueue: 线程安全的排他队列结构;是一个单向链表实现的阻塞队列。该队列按 FIFO（先进先出）排序元素，新元素插入到队列的尾部，并且队列获取操作会获得位于队列头部的元素。链接队列的吞吐量通常要高于基于数组的队列，但是在大多数并发应用程序中，其可预知的性能要低。        
+- 阻塞队列
+
+![阻塞队列](https://upload-images.jianshu.io/upload_images/13587608-3fb24c186d396e82.png?imageMogr2/auto-orient/strip|imageView2/2/w/1200/format/webp)
+
+LinkedBlockingQueue: 线程安全的排他队列结构;是一个**单向链表**实现的阻塞队列。该队列按 FIFO（先进先出）排序元素，新元素插入到队列的尾部，并且队列获取操作会获得位于队列头部的元素。链接队列的吞吐量通常要高于基于数组的队列，但是在大多数并发应用程序中，其可预知的性能要低。        
 [LinkedBlockingQueue](https://www.jianshu.com/p/9394b257fdde)
 
-PriorityQueue: 是一种无界的，线程不安全的队列;通过数组实现的，并拥有优先级的队列;存储的元素要求必须是可比较的对象， 如果不是就必须明确指定比较器
+PriorityQueue: 是一种无界的，线程不安全的数据有序队列;通过数组实现的，并拥有优先级的队列;存储的元素要求必须是可比较的对象， 如果不是就必须明确指定比较器
 
 
+TransferQueue: 阻塞放入队列.应用场景: 要求多线程间实现同步请求并响应结果.
+SynchronusQueue: SynchronousQueue是BlockingQueue的一种，所以SynchronousQueue是线程安全的。SynchronousQueue和其他的BlockingQueue不同的是SynchronousQueue的capacity是0。即SynchronousQueue不存储任何元素。也就是说SynchronousQueue的每一次insert操作，必须等待其他线性的remove操作。而每一个remove操作也必须等待其他线程的insert操作。这种特性可以让我们想起了Exchanger。和Exchanger不同的是，使用SynchronousQueue可以在两个线程中传递同一个对象。一个线程放对象，另外一个线程取对象。
 
+ArrayBlockingQueue: 阻塞队列,底层数据结构为数组.
+
+TransferQueue: 通过FIFO队列实现的公平线程进程队列.
+
+DelayQueue: 延迟队列,给定时间内才能获取队列元素的功能.底层是通过PriorityQueue实现.
+
+[阻塞队列介绍](https://www.itzhai.com/articles/graphical-blocking-queue.html)
 
 ### 设计思路学习
 

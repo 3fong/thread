@@ -151,8 +151,35 @@ AQS acquiry源码
 WeakHashMap 作用:作缓存,key是弱引用,当key为null时,垃圾回收时会进行内存空间回收;
 
 
+### 线程池
 
-ide 虚拟机参数配置 -Xms20M -Xmx20M
+ThreadPoolExecutor: 
+
+ThreadPoolExecutor -> ExecutorService -> Executor
+
+源码分析:
+
+    Worker类
+    submit方法
+    execute
+    addWorker
+
+Executor
+
+执行者
+Thread run start
+Runnalbe new Thread(runnable).start();
+分离任务的定义与执行
+
+
+- 线程返回值处理
+
+Callable -> Runnable + return
+Future -> 存储执行的将来才会产生的结果
+FutureTask -> Future + Runnable
+
+
+
 
 
 参考资料:
