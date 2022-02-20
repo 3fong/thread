@@ -31,12 +31,27 @@ public class T06_01_CompletableFuture {
         CompletableFuture<Double> futureTB = CompletableFuture.supplyAsync(()->priceOfTB());
         CompletableFuture<Double> futureJD = CompletableFuture.supplyAsync(()->priceOfJD());
 
-        CompletableFuture.allOf(futureTM, futureTB, futureJD).join();
-
-        CompletableFuture.supplyAsync(()->priceOfTM())
-                .thenApply(String::valueOf)
+        /**
+         * allOf没有返回值
+         */
+        CompletableFuture<Void> allOf = CompletableFuture.allOf(futureTM, futureTB, futureJD);
+        allOf.thenApply(v-> {
+                    try {
+                        return futureJD.get();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    } catch (ExecutionException e) {
+                        e.printStackTrace();
+                    }
+                    return null;
+                })
                 .thenApply(str-> "price " + str)
                 .thenAccept(System.out::println);
+
+//        CompletableFuture.supplyAsync(()->priceOfTM())
+//                .thenApply(String::valueOf)
+//                .thenApply(str-> "price " + str)
+//                .thenAccept(System.out::println);
 
 
         end = System.currentTimeMillis();

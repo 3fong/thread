@@ -1,6 +1,6 @@
 /**
- * 认识Callable，对Runnable进行了扩展
- * 对Callable的调用，可以有返回值
+ * 锟斤拷识Callable锟斤拷锟斤拷Runnable锟斤拷锟斤拷锟斤拷锟斤拷展
+ * 锟斤拷Callable锟侥碉拷锟矫ｏ拷锟斤拷锟斤拷锟叫凤拷锟斤拷值
  */
 package com.mashibing.juc.c_026_01_ThreadPool;
 
@@ -16,9 +16,9 @@ public class T03_Callable {
         };
 
         ExecutorService service = Executors.newCachedThreadPool();
-        Future<String> future = service.submit(c); //异步
+        Future<String> future = service.submit(c);
 
-        System.out.println(future.get());//阻塞
+        System.out.println(future.get());// 闃诲
 
         service.shutdown();
     }

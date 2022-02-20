@@ -2,6 +2,9 @@ package com.mashibing.juc.c_026_00_interview.A1B2C3;
 
 import java.util.concurrent.Exchanger;
 
+/**
+ * 数据交换是双向的 Exchanger一次交互中无法控制谁先进行数据交互
+ */
 public class T12_00_Exchanger_Not_Work {
     private static Exchanger<String> exchanger = new Exchanger<>();
 

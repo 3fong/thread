@@ -5,29 +5,24 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * 连个线程交替打印: A1B2...Z26
+ * CountDownLatch 无法实现此功能 因为无法明确的控制放行和阻塞线程
  */
-public class MixOutPut {
+public class MixOutCas {
 
     private static final String[] LETTER = {"A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"};
-
+    // static保证实例全局唯一;volatile保证线程内部不适用本地缓存,实现可见性
+    static volatile int park=0;
     public static void main(String[] args) throws InterruptedException {
-        CountDownLatch latch = new CountDownLatch(1);
-        CountDownLatch latch2 = new CountDownLatch(1);
+
         Thread write;
         Runnable runnable1 = new Runnable() {
             @Override
             public void run() {
                 for (int i=0; i < 26 ; i++) {
-//                    latch.countDown();
-                    System.out.print(LETTER[i]);
-                    try {
-                        latch.await();
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-
+                  while(park==1) {} // 循环阻塞
+                  System.out.print(LETTER[i]);
+                  park=park+1;
                 }
-
             }
         };
         write = new Thread(runnable1);
@@ -36,13 +31,9 @@ public class MixOutPut {
             @Override
             public void run() {
                 for (int i=0; i < 26 ; i++) {
+                    while(park==0){}
                     System.out.println(i+1);
-//                    latch.countDown();
-                    try {
-                        latch2.await();
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
+                    park=park-1;
                 }
             }
         };
@@ -50,12 +41,6 @@ public class MixOutPut {
 
         write.start();
         monitor.start();
-
-        for (int i = 0; i < 26; i++) {
-            latch.countDown();
-            latch2.countDown();
-            TimeUnit.SECONDS.sleep(1);
-        }
     }
 
 }

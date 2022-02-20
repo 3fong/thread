@@ -174,9 +174,12 @@ Runnalbe new Thread(runnable).start();
 
 - 线程返回值处理
 
-Callable -> Runnable + return
-Future -> 存储执行的将来才会产生的结果
-FutureTask -> Future + Runnable
+Callable、Runnable、Future、CompletableFuture之间的关系一目了然：
+
+Callable，有结果的同步行为，比如做蛋糕，产生蛋糕
+Runnable，无结果的同步行为，比如喝牛奶，仅仅就是喝
+Future，异步封装Callable/Runnable，比如委托给师傅（其他线程）去做糕点
+CompletableFuture，封装Future，使其拥有回调功能，比如让师傅主动告诉我蛋糕做好了
 
 
 

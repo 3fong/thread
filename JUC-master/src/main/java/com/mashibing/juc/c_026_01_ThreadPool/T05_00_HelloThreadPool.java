@@ -42,11 +42,11 @@ public class T05_00_HelloThreadPool {
         }
 
         System.out.println(tpe.getQueue());
-
-        tpe.execute(new Task(100));
-
-        System.out.println(tpe.getQueue());
-
         tpe.shutdown();
+//        tpe.execute(new Task(100));
+////
+//        System.out.println(tpe.getQueue());
+
+
     }
 }
