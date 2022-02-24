@@ -65,9 +65,27 @@ PriorityQueue: 是一种无界的，线程不安全的队列;通过数组实现�
 
 
 
-### 设计思路学习
+#### 设计思路学习
 
 ConcurrentHashMap<K, V> extends AbstractMap<K, V> implements ConcurrentMap<K, V>
+
+
+
+
+### 连接池
+
+ForkJoinPool: Java提供了ForkJoinPool来支持将一个任务拆分成多个“小任务”并行计算，再把多个“小任务”的结果合成总的计算结果.工作窃取（work-stealing）算法是指某个线程从其他队列里窃取任务来执行。    
+
+
+
+
+
+
+
+
+
+
+
 
 ### 学习一下游戏开发
 
