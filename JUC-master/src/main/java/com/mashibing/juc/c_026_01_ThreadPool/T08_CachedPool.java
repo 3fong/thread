@@ -20,7 +20,7 @@ public class T08_CachedPool {
 		}
 		System.out.println(service);
 		
-		TimeUnit.SECONDS.sleep(80);
+		TimeUnit.SECONDS.sleep(2);
 		
 		System.out.println(service);
 		

@@ -151,8 +151,38 @@ AQS acquiry源码
 WeakHashMap 作用:作缓存,key是弱引用,当key为null时,垃圾回收时会进行内存空间回收;
 
 
+### 线程池
 
-ide 虚拟机参数配置 -Xms20M -Xmx20M
+ThreadPoolExecutor: 
+
+ThreadPoolExecutor -> ExecutorService -> Executor
+
+源码分析:
+
+    Worker类
+    submit方法
+    execute
+    addWorker
+
+Executor
+
+执行者
+Thread run start
+Runnalbe new Thread(runnable).start();
+分离任务的定义与执行
+
+
+- 线程返回值处理
+
+Callable、Runnable、Future、CompletableFuture之间的关系一目了然：
+
+Callable，有结果的同步行为，比如做蛋糕，产生蛋糕
+Runnable，无结果的同步行为，比如喝牛奶，仅仅就是喝
+Future，异步封装Callable/Runnable，比如委托给师傅（其他线程）去做糕点
+CompletableFuture，封装Future，使其拥有回调功能，比如让师傅主动告诉我蛋糕做好了
+
+
+
 
 
 参考资料:
